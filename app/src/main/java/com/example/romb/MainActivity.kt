@@ -43,6 +43,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun RhombusAreaScreen(modifier: Modifier = Modifier) {
     var variantText by remember { mutableStateOf("") }
+    var sideText by remember { mutableStateOf("") }
+    var heightText by remember { mutableStateOf("") }
+    var d1Text by remember { mutableStateOf("") }
+    var d2Text by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -55,6 +59,13 @@ fun RhombusAreaScreen(modifier: Modifier = Modifier) {
             fontWeight = FontWeight.Bold
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "1 — по стороне и высоте (S = a·h)\n2 — по диагоналям (S = d1·d2/2)",
+            fontSize = 14.sp
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
@@ -64,6 +75,55 @@ fun RhombusAreaScreen(modifier: Modifier = Modifier) {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        val variant = variantText.toIntOrNull()
+
+        when (variant) {
+            1 -> {
+                OutlinedTextField(
+                    value = sideText,
+                    onValueChange = { sideText = it },
+                    label = { Text("Сторона a") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = heightText,
+                    onValueChange = { heightText = it },
+                    label = { Text("Высота h") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            2 -> {
+                OutlinedTextField(
+                    value = d1Text,
+                    onValueChange = { d1Text = it },
+                    label = { Text("Диагональ d1") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = d2Text,
+                    onValueChange = { d2Text = it },
+                    label = { Text("Диагональ d2") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            else -> {
+                if (variantText.isNotEmpty()) {
+                    Text(
+                        text = "Введите 1 или 2",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+        }
     }
 }
 
