@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +37,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RoMbTheme {
-                Scaffold( modifier = Modifier.fillMaxSize() ) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     RhombusAreaScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
     }
 }
+
 @Composable
 fun RhombusAreaScreen(modifier: Modifier = Modifier) {
     var variantText by remember { mutableStateOf("") }
@@ -55,6 +58,7 @@ fun RhombusAreaScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(24.dp)
     ) {
         Text(
@@ -66,7 +70,7 @@ fun RhombusAreaScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "1 — по стороне и высоте (S = a·h)\n2 — по диагоналям (S = d1·d2/2)",
+            text = "1. По стороне и высоте (S = a·h)\n2. По диагоналям (S = d1·d2/2)",
             fontSize = 14.sp
         )
 
@@ -74,7 +78,11 @@ fun RhombusAreaScreen(modifier: Modifier = Modifier) {
 
         OutlinedTextField(
             value = variantText,
-            onValueChange = { variantText = it },
+            onValueChange = {
+                variantText = it
+                result = null
+                errorMessage = null
+            },
             label = { Text("Номер варианта решения (1 или 2)") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
@@ -128,6 +136,7 @@ fun RhombusAreaScreen(modifier: Modifier = Modifier) {
                 }
             }
         }
+
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
@@ -167,6 +176,7 @@ fun RhombusAreaScreen(modifier: Modifier = Modifier) {
         ) {
             Text("Вычислить")
         }
+
         Spacer(modifier = Modifier.height(20.dp))
 
         result?.let {
@@ -186,7 +196,6 @@ fun RhombusAreaScreen(modifier: Modifier = Modifier) {
             )
         }
     }
-
 }
 
 @Preview(showBackground = true)
