@@ -26,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +49,8 @@ fun RhombusAreaScreen(modifier: Modifier = Modifier) {
     var heightText by remember { mutableStateOf("") }
     var d1Text by remember { mutableStateOf("") }
     var d2Text by remember { mutableStateOf("") }
+    var result by remember { mutableStateOf<String?>(null) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = modifier
@@ -123,6 +127,45 @@ fun RhombusAreaScreen(modifier: Modifier = Modifier) {
                     )
                 }
             }
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(
+            onClick = {
+                errorMessage = null
+                result = null
+                try {
+                    val area: Double = when (variant) {
+                        1 -> {
+                            val a = sideText.replace(",", ".").toDouble()
+                            val h = heightText.replace(",", ".").toDouble()
+                            if (a <= 0 || h <= 0) {
+                                throw IllegalArgumentException("Значения должны быть положительными")
+                            }
+                            a * h
+                        }
+                        2 -> {
+                            val d1 = d1Text.replace(",", ".").toDouble()
+                            val d2 = d2Text.replace(",", ".").toDouble()
+                            if (d1 <= 0 || d2 <= 0) {
+                                throw IllegalArgumentException("Значения должны быть положительными")
+                            }
+                            (d1 * d2) / 2.0
+                        }
+                        else -> {
+                            throw IllegalArgumentException("Неверный номер варианта. Введите 1 или 2")
+                        }
+                    }
+                    result = "Площадь ромба: %.4f".format(area)
+                } catch (_: NumberFormatException) {
+                    errorMessage = "Введите корректные числовые значения"
+                } catch (e: IllegalArgumentException) {
+                    errorMessage = e.message
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Вычислить")
         }
     }
 }
