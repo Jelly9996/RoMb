@@ -167,7 +167,26 @@ fun RhombusAreaScreen(modifier: Modifier = Modifier) {
         ) {
             Text("Вычислить")
         }
+        Spacer(modifier = Modifier.height(20.dp))
+
+        result?.let {
+            Text(
+                text = it,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+
+        errorMessage?.let {
+            Text(
+                text = it,
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
     }
+
 }
 
 @Preview(showBackground = true)
